@@ -2,20 +2,12 @@
 
 这个例子的目的是告诉你如何把一个Node.js应用程序放入到Docker容器。 该指南旨在用于开发，而不是用于生产部署。 该指南还假定你有安装Docker的经验，且对Node.js应用程序是如何构建的,有一个基本的了解.
 
-
-
 在本指南的第一部分，我们将用Node.js创建一个简单的Web应用程序, 然后我们将为该应用程序建立一个Docker映像， 最后我们将运行这个镜像作为一个容器。
-
-
 
 Docker允许你把一个应用和它的所有依赖打包成一个标准化单元,称为一个容器(container),用于软件开发. 每一个容器(container)都是一个精简到基本版本的Linux操作系统。 镜像(image)是你加载到一个容器中的软件。
 
-
-
 创建 Node.js 应用程序
 首先，创建一个新目录,所有文件将会位于其中。 在此目录中，创建一个package.json文件，描述你的应用程序及其依赖：
-
-
 
 `
 {
@@ -35,8 +27,8 @@ Docker允许你把一个应用和它的所有依赖打包成一个标准化单�
 
 
 然后，创建一个server.js文件,用来定义了一个使用Express.js框架的Web应用程序：
-`
 
+`
 'use strict';
 
 const express = require('express');
@@ -53,11 +45,12 @@ app.get('/', function (req, res) {
 app.listen(PORT);
 console.log('Running on http://localhost:' + PORT);
 `
+
 在接下来的步骤中,我们将看看你如何在一个Docker容器内运行这个应用程序,使用官方Docker镜像. 首先，你需要为你的应用程序构建一个Docker镜像。
 
 
-
 创建一个 Dockerfile
+
 创建一个名为Dockerfile一个空文件：
 
 `
@@ -73,9 +66,11 @@ FROM node:argon
 
 接下来，我们创建一个目录用于在镜像中保存应用程序的代码， 这将是你的应用程序的工作目录：
 
-# Create app directory
+`# Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+`
+
 此镜像自带的Node.js和NPM已经安装了,所以接下来我们需要做的就是使用npmbinary,来安装你的应用程序的依赖：
 
 `# Install app dependencies
@@ -150,12 +145,14 @@ Running on http://localhost:8080
 `
 如果你需要进容器内可以使用exec命令：
 
-# Enter the container
+`# Enter the container
 $ docker exec -it <container id> /bin/bash
+`
+
 测试
 要测试你的应用程序，获取的你的应用程序的Docker映射端口：
 
-$ docker ps
+`$ docker ps`
 
 # Example
 ID            IMAGE                                COMMAND    ...   PORTS
@@ -164,14 +161,14 @@ ecce33b30ebf  <your username>/node-web-app:latest  npm start  ...   49160->8080
 
 现在你可以使用curl调用你的应用程序(如果需要的话,安装命令：sudo apt-get install curl)：
 
-$ curl -i localhost:49160
+`$ curl -i localhost:49160`
 
-HTTP/1.1 200 OK
+`HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: text/html; charset=utf-8
 Content-Length: 12
 Date: Sun, 02 Jun 2013 03:53:22 GMT
-Connection: keep-alive
+Connection: keep-alive`
 
 Hello world
 我们希望该教程帮助了你在Docker上启动和运行一个简单的Node.js应用程序。
@@ -179,11 +176,17 @@ Hello world
 你可以找到有关的Docker和Node.js on Docker更多信息,在以下的地方：
 
 官方 Node.js Docker 镜像
+
 Node.js Docker 最佳实践指南
+
 官方 Docker 文档
+
 Docker Tag on StackOverflow
+
 Docker Subreddit
 
 Docker for Windows
+
 Docker Hub
+
 cloud docker
