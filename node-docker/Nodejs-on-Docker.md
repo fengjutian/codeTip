@@ -60,17 +60,17 @@ console.log('Running on http://localhost:' + PORT);
 创建一个 Dockerfile
 创建一个名为Dockerfile一个空文件：
 
-
 `
 $ touch Dockerfile
 `
+
 在你喜欢的文本编辑器中打开Dockerfile
 我们需要做的第一件事就是定义要从什么镜像构建我们想要构建的。 这里我们将使用最新的LTS(长期支持)版argon ,可用于Docker Hub的node：
----
 
 `
 FROM node:argon
 `
+
 接下来，我们创建一个目录用于在镜像中保存应用程序的代码， 这将是你的应用程序的工作目录：
 
 # Create app directory
@@ -78,13 +78,17 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 此镜像自带的Node.js和NPM已经安装了,所以接下来我们需要做的就是使用npmbinary,来安装你的应用程序的依赖：
 
-# Install app dependencies
+`# Install app dependencies
 COPY package.json /usr/src/app/
 RUN npm install
+`
+
 要打包在Docker镜像内的你的应用程序的源代码,使用COPY指令:
 
-# Bundle app source
+`# Bundle app source
 COPY . /usr/src/app
+`
+
 你的应用程序绑定到8080端口，所以你将使用EXPOSE指令把它映射,由docker守护程序(daemon)：
 
 EXPOSE 8080
@@ -96,26 +100,31 @@ PS:(npm start === node server.js)"scripts": { "start": "node server.js" }
 
 FROM node:argon
 
-# Create app directory
+`# Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+`
 
-# Install app dependencies
+`# Install app dependencies
 COPY package.json /usr/src/app/
 RUN npm install
+`
 
-# Bundle app source
+`# Bundle app source
 COPY . /usr/src/app
+`
 
-EXPOSE 8080
+`EXPOSE 8080
 CMD [ "npm", "start" ]
+`
 构建你的镜像
 进入到Dockerfile所在的目录并运行以下命令来构建Docker镜像。 -t标志可以让你标记你的镜像，以便更容易发现以后使用docker images命令：
 
-$ docker build -t <your username>/node-web-app .
+`$ docker build -t <your username>/node-web-app .`
+
 你的镜像现在将会被Docker列出：
 
-$ docker images
+`$ docker images`
 
 # Example
 REPOSITORY                      TAG        ID              CREATED
@@ -124,17 +133,21 @@ node                            argon      539c0211cd76    3 weeks ago
 运行镜像
 运行你的镜像,带有-d容器将运行在独立模式下，让容器在后台运行。-p标志,将一个公共端口重定向到容器内的一个私有端口。运行你之前构建的镜像：
 
-$ docker run -p 49160:8080 -d <your username>/node-web-app
+`$ docker run -p 49160:8080 -d <your username>/node-web-app`
+
 打印你的应用程序的输出：
 
-# Get container ID
+`# Get container ID
 $ docker ps
+`
 
-# Print app output
+`# Print app output
 $ docker logs <container id>
+`
 
-# Example
+`# Example
 Running on http://localhost:8080
+`
 如果你需要进容器内可以使用exec命令：
 
 # Enter the container
